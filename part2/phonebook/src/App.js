@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PersonForm from "./components/PersonForm";
-import axios from "axios";
-import Persons from "./components/Persons";
 import Filter from "./components/Filter";
+import personService from './services/persons'
+import Person from "./components/Person";
 
 
 
@@ -11,41 +11,81 @@ const App = () => {
     const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState("")
     const [newNumber,setNewNumber] =useState("")
-    const [newFilter,setFilter] =useState("")
+    const [filter,setFilter] =useState("")
 
 
     const addPerson = (event) => {
         event.preventDefault()
-        const found = persons.find(el => el.name ===newName)
-        if(found){
-            console.log("duplicate")
-            window.alert(`${newName} is already added to phonebook`);
+        const personObject = {
+            name: newName,
+            number: newNumber,
+            id: persons.length +1,
+
+
         }
-        else {
-
-            const personObject = {
-                name: newName,
-                number: newNumber,
-                id: persons.length +1,
-
-
+        const found = persons.find(el => el.name ===newName)
+        if(found) {
+            if (newNumber.length != 0) {
+                if (window.confirm(`${newName} is already added to the phonebook, replace existing phone number?`)) {
+                    const repl = persons.find(el => el.name === newName)
+                    personService
+                        .update(repl.id, personObject)
+                        .then((response) => {
+                            const responsePerson = persons.map((person) =>
+                                person.id !== response.id ? person : response
+                            );
+                            setPersons(responsePerson)
+                        })
+                }
             }
+            else { window.alert(`Add the new phone number for ${newName}`);
+            }
+        }
+        else if(newNumber.length===0 || newName.length==0){
+                window.alert(`Add information`);
+            }
+        else {
+            personService
+                .create(personObject)
+                .then(response => {
+                    console.log(personObject)
+                    setPersons(persons.concat(personObject))
+                    setNewName("")
+                    setNewNumber("")
+                })
+            /*
             console.log(personObject)
             setPersons(persons.concat(personObject))
             //console.log(persons)
             setNewName("")
             setNewNumber("")
+            */
 
+        }
+    }
+
+    const deletePerson = (id, name) => {
+        if (window.confirm(`Delete ${name}?`)) {
+            console.log(id)
+            personService
+                .remove(id)
+                .then(response => {
+                    setPersons(persons.filter(person => person.id !== id))
+
+
+                })
 
         }
     }
     const hook = () => {
         console.log('effect')
-        axios
-            .get('http://localhost:3001/persons')
+        personService
+            .getAll()
             .then(response => {
                 console.log('promise fulfilled')
-                setPersons(response.data)
+                console.log(response)
+                setPersons(response)
+                console.log()
             })
     }
     useEffect(hook, [])
@@ -64,10 +104,12 @@ const App = () => {
         setFilter(event.target.value)
     }
 
+    const searchFilter = persons.filter((person =>
+        person.name.toLowerCase().includes(filter.toLowerCase())));
     return (
         <div>
             <h2>Phonebook</h2>
-            <Filter value={newFilter} onChange={handleSearchChange} />
+            <Filter value={filter} onChange={handleSearchChange} />
 
 
 
@@ -82,7 +124,10 @@ const App = () => {
             />
 
             <h3>Numbers</h3>
-            <Persons persons={persons} newFilter={newFilter} />
+            {searchFilter.map((persons) =>
+            <Person key={persons.id} id={persons.id} name={persons.name} number={persons.number} deletePerson={deletePerson} />
+            )
+            }
         </div>
     )
 }
