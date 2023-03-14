@@ -25,7 +25,7 @@ const App = () => {
         }
         const found = persons.find(el => el.name ===newName)
         if(found) {
-            if (newNumber.length != 0) {
+            if (newNumber.length !== 0) {
                 if (window.confirm(`${newName} is already added to the phonebook, replace existing phone number?`)) {
                     const repl = persons.find(el => el.name === newName)
                     personService
@@ -35,13 +35,15 @@ const App = () => {
                                 person.id !== response.id ? person : response
                             );
                             setPersons(responsePerson)
+                            setNewName("")
+                            setNewNumber("")
                         })
                 }
             }
             else { window.alert(`Add the new phone number for ${newName}`);
             }
         }
-        else if(newNumber.length===0 || newName.length==0){
+        else if(newNumber.length===0 || newName.length===0){
                 window.alert(`Add information`);
             }
         else {
