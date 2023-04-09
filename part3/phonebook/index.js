@@ -60,14 +60,27 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const randID = Number(Math.floor(Math.random() * Number.MAX_SAFE_INTEGER))
-    const person = {
-        id: randID,
-        name: request.body.name,
-        number: request.body.number
+    const body = request.body
+
+    if(body.hasOwnProperty("name") && body.hasOwnProperty("number")){
+        const person = {
+            id: randID,
+            name: body.name,
+            number: body.number
+        }
+        if(persons.find((homonym)=>homonym.name === person.name)){
+            response.status(400)
+            response.send("name must be unique")
+        }else {
+            console.log(person)
+            persons = persons.concat(person)
+            response.json(person)
+        }
+    }else{
+        response.status(400)
+        response.send("Missing values need both name and number")
+
     }
-    console.log(person)
-    persons = persons.concat(person)
-    response.json(person)
 })
 
 
