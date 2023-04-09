@@ -26,6 +26,15 @@ let persons =[
     }
 ]
 
+app.get('/info', (request, response) => {
+    const date = new Date()
+    const personsLenght = persons.length
+    response.send(`<div>
+                            <p>Phonebook has info for ${personsLenght}</p>
+                            <p>${date}</p>
+                        </div>`)
+})
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
