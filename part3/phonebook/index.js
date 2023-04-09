@@ -1,7 +1,13 @@
 const express = require('express')
 const app = express()
-
+const morgan = require('morgan')
 app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :info'))
+
+morgan.token("info", (request, response) =>{
+
+    return request.method ==="POST" ? JSON.stringify(request.body) :  request.method
+})
 
 
 
@@ -72,7 +78,7 @@ app.post('/api/persons', (request, response) => {
             response.status(400)
             response.send("name must be unique")
         }else {
-            console.log(person)
+            //console.log(person)
             persons = persons.concat(person)
             response.json(person)
         }
