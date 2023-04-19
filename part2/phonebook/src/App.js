@@ -13,7 +13,7 @@ const App = () => {
     const [newName, setNewName] = useState("")
     const [newNumber,setNewNumber] = useState("")
     const [filter,setFilter] = useState("")
-    const [Message,setMessage]= useState(null)
+    const [message,setMessage]= useState(null)
 
 
     const addPerson = (event) => {
@@ -21,7 +21,6 @@ const App = () => {
         const personObject = {
             name: newName,
             number: newNumber,
-            id: persons.length +1,
 
 
         }
@@ -37,12 +36,7 @@ const App = () => {
                                 person.id !== response.id ? person : response
                             );
                             setMessage(`Uppdated ${personObject.name} number to ${personObject.number}`)
-                            setTimeout(() => {
-                                setMessage(null)
-                            }, 5000)
                             setPersons(responsePerson)
-                            setNewName("")
-                            setNewNumber("")
                         })
                 }
             }
@@ -59,34 +53,21 @@ const App = () => {
                     console.log(personObject)
                     setPersons(persons.concat(personObject))
                     setMessage(`Added ${personObject.name}`)
-                    setTimeout(() => {
-                        setMessage(null)
-                    }, 5000)
 
-                    setNewName("")
-                    setNewNumber("")
                 })
-            /*
-            console.log(personObject)
-            setPersons(persons.concat(personObject))
-            //console.log(persons)
-            setNewName("")
-            setNewNumber("")
-            */
 
         }
     }
 
     const deletePerson = (id, name) => {
         if (window.confirm(`Delete ${name}?`)) {
-            console.log(id)
             personService
                 .remove(id)
                 .then(response => {
                     setPersons(persons.filter(person => person.id !== id))
 
-
                 })
+                .catch((error) => setMessage(error.response.data.error))
 
         }
     }
@@ -102,6 +83,17 @@ const App = () => {
             })
     }
     useEffect(hook, [])
+
+    const timer  = () => {
+        setTimeout(() => {
+            setMessage(null)
+        }, 5000)
+
+        setNewName("")
+        setNewNumber("")
+
+    }
+    useEffect(timer, [message])
 
 
 
@@ -122,7 +114,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
-            <Notification message={Message}/>
+            <Notification message={message}/>
             <Filter value={filter} onChange={handleSearchChange} />
 
 
