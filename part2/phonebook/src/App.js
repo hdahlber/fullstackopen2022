@@ -14,6 +14,7 @@ const App = () => {
     const [newNumber,setNewNumber] = useState("")
     const [filter,setFilter] = useState("")
     const [message,setMessage]= useState(null)
+    const [isSuccess, setSuccess] = useState(true)
 
 
     const addPerson = (event) => {
@@ -21,7 +22,6 @@ const App = () => {
         const personObject = {
             name: newName,
             number: newNumber,
-
 
         }
         const found = persons.find(el => el.name ===newName)
@@ -36,8 +36,14 @@ const App = () => {
                                 person.id !== response.id ? person : response
                             );
                             setMessage(`Uppdated ${personObject.name} number to ${personObject.number}`)
+                            setSuccess(true)
                             setPersons(responsePerson)
                         })
+                        .catch(error => {
+                            setMessage(error.response.data.error)
+                            setSuccess(false)
+                        })
+
                 }
             }
             else { window.alert(`Add the new phone number for ${newName}`);
@@ -53,7 +59,12 @@ const App = () => {
                     console.log(personObject)
                     setPersons(persons.concat(personObject))
                     setMessage(`Added ${personObject.name}`)
+                    setSuccess(true)
 
+                })
+                .catch(error => {
+                    setMessage(error.response.data.error)
+                    setSuccess(false)
                 })
 
         }
@@ -65,9 +76,14 @@ const App = () => {
                 .remove(id)
                 .then(response => {
                     setPersons(persons.filter(person => person.id !== id))
+                    setMessage(`removed ${name} from phonebook`);
+                    setSuccess(true)
 
                 })
-                .catch((error) => setMessage(error.response.data.error))
+                .catch(error => {
+                    setMessage(error.response.data.error)
+                    setSuccess(false)
+                })
 
         }
     }
@@ -79,18 +95,19 @@ const App = () => {
                 console.log('promise fulfilled')
                 console.log(response)
                 setPersons(response)
-                console.log()
+
             })
     }
     useEffect(hook, [])
 
     const timer  = () => {
+        setNewName("")
+        setNewNumber("")
         setTimeout(() => {
             setMessage(null)
         }, 5000)
 
-        setNewName("")
-        setNewNumber("")
+
 
     }
     useEffect(timer, [message])
@@ -114,7 +131,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
-            <Notification message={message}/>
+            <Notification message={message} isSuccess={isSuccess}/>
             <Filter value={filter} onChange={handleSearchChange} />
 
 
