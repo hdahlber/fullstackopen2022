@@ -5,7 +5,7 @@ const mongoose = require("mongoose")
 const config = require("./utils/config")
 const logger = require("./utils/logger")
 const middleware = require("./utils/middleware")
-const blogsRouter = require("./controllers/blogs");
+const blogsRouter = require("./controllers/blogs")
 mongoose.set("strictQuery", false)
 
 mongoose.connect(config.MONGODB_URI)
@@ -15,7 +15,7 @@ mongoose.connect(config.MONGODB_URI)
     })
     .catch((error) => {
         logger.error("error connecting to MongoDB:", error.message)
-    });
+    })
 
 app.use(cors())
 app.use(express.json())
