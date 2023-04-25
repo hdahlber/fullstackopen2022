@@ -23,6 +23,17 @@ test("blogs are returned as json, and check sum of them", async () => {
 
 })
 
+test("blogs have property id defined", async () => {
+    const responese = await api.get("/api/blogs")
+    for(const blog of responese.body){
+        expect(blog.id).toBeDefined()
+    }
+
+
+
+
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
