@@ -81,11 +81,42 @@ test("delete of a blog", async () => {
     expect(blogsAtEnd).toHaveLength(
         helper.blogs.length - 1
     )
-
-
-
 })
+describe("update a blog with likes ", () => {
+    test("update likes, should be successfull", async () => {
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToUpdate = blogsAtStart[0]
+        await api
+            .put(`/api/blogs/${blogToUpdate.id}`)
+            .send({likes: 123})
+            .expect(200)
 
+    })
+    test("update likes with a string, should 400", async () => {
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToUpdate = blogsAtStart[0]
+        await api
+            .put(`/api/blogs/${blogToUpdate.id}`)
+            .send({likes: "eqwewweqew"})
+            .expect(400)
+
+    })
+    test("update likes with multiple params, should 200", async () => {
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToUpdate = blogsAtStart[0]
+
+        const update ={
+            author: "eqwewweqew",
+            likes: 134,
+            url: "http://ewqewqewwwe.com",
+        }
+        await api
+            .put(`/api/blogs/${blogToUpdate.id}`)
+            .send(update)
+            .expect(200)
+
+    })
+})
 
 afterAll(async () => {
     await mongoose.connection.close()
