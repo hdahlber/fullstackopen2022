@@ -18,7 +18,7 @@ test("blogs are returned as json, and check sum of them", async () => {
         .get("/api/blogs")
         .expect(200)
         .expect("Content-Type", /application\/json/)
-    expect(responese.body).toHaveLength(6)
+    expect(responese.body).toHaveLength(helper.blogs.length)
 
 
 })
@@ -30,7 +30,16 @@ test("blogs have property id defined", async () => {
     }
 
 
+})
 
+test("creation of a new blog", async () => {
+    await api
+        .post("/api/blogs")
+        .send(helper.listWithOneBlog)
+        .expect(201)
+        .expect("Content-Type", /application\/json/)
+    const responese = await api.get("/api/blogs")
+    expect(responese.body).toHaveLength(helper.blogs.length +1)
 
 })
 
