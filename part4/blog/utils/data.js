@@ -10,6 +10,16 @@ const listWithOneBlog = [
         __v: 0
     }
 ]
+
+const listWithOneBlogAndLikesMissing = [
+    {
+        _id: "5a422aa71b54a676234d17f8",
+        title: "Go To Statement Considered Harmful",
+        author: "Edsger W. Dijkstra",
+        url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+        __v: 0
+    }
+]
 const blogs = [
     {
         _id: "5a422a851b54a676234d17f7",
@@ -64,5 +74,6 @@ const blogs = [
 module.exports = {
     emptyBlog,
     listWithOneBlog,
-    blogs
+    blogs,
+    listWithOneBlogAndLikesMissing
 }

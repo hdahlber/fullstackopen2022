@@ -43,6 +43,17 @@ test("creation of a new blog", async () => {
 
 })
 
+test("if no likes then default should be 0", async () => {
+    const responese = await api
+        .post("/api/blogs")
+        .send(helper.listWithOneBlogAndLikesMissing)
+        .expect(201)
+        .expect("Content-Type", /application\/json/)
+    expect(responese.body.likes).toBe(0)
+    //console.log(responese.body.likes)
+
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
