@@ -1,7 +1,9 @@
+const Blog = require("../models/blog")
 const emptyBlog =[]
 
 const listWithOneBlog =
     {
+
         title: "listwithoneblog",
         author: "qwe",
         url: "https://www.u.arizona.edu/~rubinson/copyright_violations/",
@@ -84,6 +86,11 @@ const blogs = [
     }
 ]
 
+const blogsInDb = async () => {
+    const blogs = await Blog.find({})
+    return blogs.map(note => note.toJSON())
+}
+
 module.exports = {
     emptyBlog,
     listWithOneBlog,
@@ -91,5 +98,6 @@ module.exports = {
     listWithOneBlogAndURLMissing,
     listWithOneBlogAndTitleMissing,
     blogs,
+    blogsInDb
 
 }

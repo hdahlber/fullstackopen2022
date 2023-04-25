@@ -40,8 +40,8 @@ test("creation of a new blog", async () => {
         .send(helper.listWithOneBlog)
         .expect(201)
         .expect("Content-Type", /application\/json/)
-    const responese = await api.get("/api/blogs")
-    expect(responese.body).toHaveLength(helper.blogs.length +1)
+    const responese = await helper.blogsInDb()
+    expect(responese).toHaveLength(helper.blogs.length +1)
 
 })
 
@@ -68,6 +68,24 @@ test("if url missing, response 400", async () => {
         .send(helper.listWithOneBlogAndURLMissing)
         .expect(400)
 })
+
+test("delete of a blog", async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(
+        helper.blogs.length - 1
+    )
+
+
+
+})
+
 
 afterAll(async () => {
     await mongoose.connection.close()
