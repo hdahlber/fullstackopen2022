@@ -1,25 +1,38 @@
 const emptyBlog =[]
 
-const listWithOneBlog = [
+const listWithOneBlog =
     {
-        _id: "5a422aa71b54a676234d17f8",
-        title: "Go To Statement Considered Harmful",
-        author: "Edsger W. Dijkstra",
-        url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+        title: "listwithoneblog",
+        author: "qwe",
+        url: "https://www.u.arizona.edu/~rubinson/copyright_violations/",
         likes: 5,
-        __v: 0
     }
-]
 
-const listWithOneBlogAndLikesMissing = [
+
+const listWithOneBlogAndLikesMissing =
     {
-        _id: "5a422aa71b54a676234d17f8",
+
+        title: "listWithOneBlogAndLikesMissing",
+        author: "Edsger W. Dijkstra",
+        url: "https://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+
+    }
+
+const listWithOneBlogAndTitleMissing =
+    {
+        author: "Edsger W. Dijkstra",
+        url: "https://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+        likes: 5,
+    }
+
+const listWithOneBlogAndURLMissing =
+    {
+
         title: "Go To Statement Considered Harmful",
         author: "Edsger W. Dijkstra",
-        url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-        __v: 0
+        likes: 5,
     }
-]
+
 const blogs = [
     {
         _id: "5a422a851b54a676234d17f7",
@@ -74,6 +87,9 @@ const blogs = [
 module.exports = {
     emptyBlog,
     listWithOneBlog,
+    listWithOneBlogAndLikesMissing,
+    listWithOneBlogAndURLMissing,
+    listWithOneBlogAndTitleMissing,
     blogs,
-    listWithOneBlogAndLikesMissing
+
 }

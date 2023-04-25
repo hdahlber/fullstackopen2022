@@ -33,6 +33,8 @@ test("blogs have property id defined", async () => {
 })
 
 test("creation of a new blog", async () => {
+
+
     await api
         .post("/api/blogs")
         .send(helper.listWithOneBlog)
@@ -52,6 +54,19 @@ test("if no likes then default should be 0", async () => {
     expect(responese.body.likes).toBe(0)
     //console.log(responese.body.likes)
 
+})
+test("if title missing, response 400", async () => {
+    await api
+        .post("/api/blogs")
+        .send(helper.listWithOneBlogAndTitleMissing)
+        .expect(400)
+
+})
+test("if url missing, response 400", async () => {
+    await api
+        .post("/api/blogs")
+        .send(helper.listWithOneBlogAndURLMissing)
+        .expect(400)
 })
 
 afterAll(async () => {
